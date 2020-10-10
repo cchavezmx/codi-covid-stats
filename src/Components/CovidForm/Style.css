@@ -1,0 +1,32 @@
+.container {
+    width: auto;
+    height: auto;
+    display: flex;
+    padding: 0.3rem;
+    /* align-items: center; */
+    flex-direction: column;
+    /* border: solid 1px red; */
+  }
+  
+  .container > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0.3rem 0.3rem 0.3rem 0.3rem ;
+    border: 2px solid rgb(72, 72, 170);
+    border-radius: 0.3rem;
+    padding: 1rem 1rem 1rem 1rem;
+  }
+
+  .button {
+    margin: 1rem;
+    width: 20rem;
+    height: 5rem;
+  }
+
+  .container--boton{
+    padding: 2rem;
+    border: white;
+    display: flex;
+    justify-content: center;
+  }

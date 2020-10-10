@@ -1,25 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Fragment } from 'react';
+import CovidForm from '../src/Components/CovidForm'
 import './App.css';
+
+import logo from './assets/logo.png'
+
 
 function App() {
   return (
-    <div className="App">
+    // <div className="App">
+    <Fragment>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {/* <h1>DATOS</h1> */}
+        <img src={logo} alt="Logo de Grupo intecsa" className="logo"></img>  
       </header>
-    </div>
+      <main className="App-center-content">
+      <CovidForm></CovidForm>
+      </main>
+      
+    {/* </div> */}
+    </Fragment>
   );
 }
 
