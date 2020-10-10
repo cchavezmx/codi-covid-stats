@@ -7,7 +7,11 @@ import { FormControl, InputLabel, Input, FormHelperText, FormLabel, RadioGroup, 
 import SendIcon from '@material-ui/icons/Send';
 
 
-function CovidForm( { personName = 'carlos chavez '} ) {
+// Router Dom
+import { Link } from 'react-router-dom'
+
+
+function CovidForm( { personName = 'Carlos Chavez' } ) {
 
     // PARA LA TOS
     const [tos, setTos] = useState(false)
@@ -73,6 +77,10 @@ function CovidForm( { personName = 'carlos chavez '} ) {
         
     }
 
+    const handleForm = () => {
+        alert('Mandamelo')
+        
+    }
     
     
     //ESTE VALOR VIENE DE LAS PROPS DE LA VENTANA DE USUARIOS
@@ -83,7 +91,7 @@ function CovidForm( { personName = 'carlos chavez '} ) {
         
          {console.log(respObjectSend)}
 
-            <form>
+            <form onSubmit={handleForm}>
             <div className="container">
                 <div className="center--div">
                     <FormControl>
@@ -152,6 +160,9 @@ function CovidForm( { personName = 'carlos chavez '} ) {
                 </div>
                 <span className="container--boton">
                   <Button
+                    component={ Link }
+                    to="/"
+                    onClick={handleForm}
                     variant="contained"
                     color="primary"
                     className="button"
@@ -159,7 +170,6 @@ function CovidForm( { personName = 'carlos chavez '} ) {
                     >Enviar
                     </Button>
                 </span>
-
             </div>
         </form>
         {/* // </Container> */}
