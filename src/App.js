@@ -12,6 +12,7 @@ function App() {
   return (
     // <div className="App">
     <Fragment>
+      <div className="App-header">
       <Router>
       {/* <header className="App-header"> */}
         {/* <h1>DATOS</h1> */}
@@ -25,6 +26,7 @@ function App() {
       </main>
       
     </Router>
+    </div>
     </Fragment>
   );
 }

@@ -2,16 +2,36 @@ import React, { useState } from 'react'
 // import Radio from '@material-ui/core/Radio';
 import './Style.css'
 
-// STILOS MATERIAL UI
-import { FormControl, InputLabel, Input, FormHelperText, FormLabel, RadioGroup, Radio, FormControlLabel, Button } from '@material-ui/core';
+// ESTILOS MATERIAL UI
+import { FormControl, FormHelperText, FormLabel, RadioGroup, Radio, FormControlLabel, Button, TextField } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 // Router Dom
-import { Link } from 'react-router-dom'
+// TODO: CREAR UN ESPACIO DONDE ESTEN LOS USUARIOS Y SE VEA QUIEN YA CONTESTO
+// import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 
 
-function CovidForm( { personName = 'Carlos Chavez' } ) {
+// import config firebase
+import { db } from '../../config/'
+
+import  personaName  from '../../assets/personaName.js'
+
+
+
+function CovidForm() {
+
+        
+    //ESTE VALOR VIENE DE LAS PROPS DE LA VENTANA DE USUARIOS
+    // lA LISTA ASESINA
+    const [ nameUser, setNameUser ] = useState('Nombre')
+    const handleNameChange = (e, newValue) => {
+        console.log(e, newValue)
+        setNameUser(newValue)
+        
+    }
 
     // PARA LA TOS
     const [tos, setTos] = useState(false)
@@ -56,9 +76,15 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
 
 
     // para la temperatura 
-    const [ temp, setTemp ] = useState(Number)
+    const [ temp, setTemp ] = useState('')
     const handleTempChange = (e) => {
-        setTemp(Number(e.target.value))
+        const tempNumer = Number(e.target.value)
+        console.log(tempNumer)
+            if(tempNumer < 0){
+                alert('temperatura no valida')
+            }else{
+                return setTemp(tempNumer)
+            }
     }
 
 
@@ -66,7 +92,7 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
 
     const respObjectSend = {
         
-            nombre : personName,
+            nombre : nameUser.name,
             temperatura: temp,
             tos: tos,
             dolor: dolor, 
@@ -76,40 +102,68 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
             fecha: Date.now()
         
     }
+// control de boton
 
-    const handleForm = () => {
-        alert('Mandamelo')
-        
+    const [sendData, setSendDataOk] = useState(false)
+
+        const getInfoDatabase = async () => {
+            const docSend = db.collection('user').doc()
+
+            try {
+            await docSend.set(respObjectSend)
+            setSendDataOk(true)
+            } catch (error) {
+            console.log('nel pastel')
+            }
+        }
+    
+        const handleForm = async (e) => {
+        e.preventDefault()
+
+        if (temp > 0) {
+              getInfoDatabase()
+        } else {
+            setErrorTempField(true)
+        }    
     }
-    
-    
-    //ESTE VALOR VIENE DE LAS PROPS DE LA VENTANA DE USUARIOS
+
+    // control de error de temperatura 
+    const [errorTempField, setErrorTempField] = useState(false)
+
+
+    // redireccionamos al terminar de mandar los datos
+    if(sendData) 
+    return <Redirect to="/" />
     
     return (
 
         <div className="container">
-        
-         {console.log(respObjectSend)}
-
-            <form onSubmit={handleForm}>
+        <form>
             <div className="container">
                 <div className="center--div">
+                    {/* NOMBRE DE LA PERSONA COMBO */}
                     <FormControl>
-                        <InputLabel htmlFor="nombre">Nombre</InputLabel>
-                        <Input disabled="true" value={personName} id="nombre" aria-describedby="nombre-helper-text"></Input>
+                        <Autocomplete
+                        value={nameUser}
+                        onChange={handleNameChange}
+                        id="combo-box-demo"
+                        options={personaName}
+                        getOptionLabel={(option) => option.name}
+                        style={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Nombre" variant="outlined" />}
+                        />
                         <FormHelperText id="nombre-helper-text" >Revisa que sea Correcto tu nombre antes de continuar</FormHelperText>
                     </FormControl>
                 </div>
                 {/* TEMPERATURA */}
                 <div center--div>
                     <FormControl>
-                      <Input type="number" required="true" id="temp" aria-labelledby="temp-helper-text" onChange={handleTempChange}></Input>
-                      <FormHelperText id="temp-helper-text">Anota tu temperatura</FormHelperText>
+                      <TextField style={{ width: 300 }} error={errorTempField} helperText={errorTempField ? "Anota tu temperatura" : null } type="number" value={temp} id="temp" aria-labelledby="temp-helper-text" onChange={handleTempChange}></TextField>
+                      <FormHelperText id="temp-helper-text">Anota tu temperatura</FormHelperText> 
                     </FormControl>  
                 </div>
                 <div>
                     <FormControl component="fieldset">
-                        {console.log(typeof(tos), tos)}
                       <FormLabel component="legend">Tos Seca</FormLabel>
                       <RadioGroup aria-label="tos" name="tos" value={tos} onChange={handleTosChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
@@ -119,7 +173,6 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
                 </div>
                 <div>
                     <FormControl component="fieldset">
-                        {console.log(typeof(dolor), dolor)}
                       <FormLabel component="legend">Dolor</FormLabel>
                       <RadioGroup aria-label="dolor" name="dolor" value={dolor} onChange={handleDolorChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
@@ -129,7 +182,6 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
                 </div>
                 <div>
                     <FormControl component="fieldset">
-                        {console.log(typeof(fiber), fiber)}
                       <FormLabel component="legend">fiebre</FormLabel>
                       <RadioGroup aria-label="fiber" name="fiber" value={fiber} onChange={handleFiberChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
@@ -139,7 +191,6 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
                 </div>
                 <div>
                     <FormControl component="fieldset">
-                        {console.log(typeof(pariente), pariente)}
                       <FormLabel component="legend">Pariente</FormLabel>
                       <RadioGroup aria-label="pariente" name="pariente" value={pariente} onChange={handleParienteChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
@@ -150,7 +201,6 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
                 </div>
                 <div>
                     <FormControl component="fieldset">
-                        {console.log(typeof(resp), resp)}
                       <FormLabel component="legend">Respiracion</FormLabel>
                       <RadioGroup aria-label="resp" name="resp" value={resp} onChange={handleRespChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
@@ -160,8 +210,9 @@ function CovidForm( { personName = 'Carlos Chavez' } ) {
                 </div>
                 <span className="container--boton">
                   <Button
-                    component={ Link }
-                    to="/"
+                    // component={ Redirect }
+                    // to="/"
+                    type="submit"
                     onClick={handleForm}
                     variant="contained"
                     color="primary"
