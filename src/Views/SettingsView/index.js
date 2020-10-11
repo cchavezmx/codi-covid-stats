@@ -43,7 +43,7 @@ function SettingsView() {
         {console.log(dataCovidInfo)}
         <AppBar></AppBar>
         <Container maxWidth="xl">
-        <div style={{ top:120, height: 600, width: '100%',}}>
+        <div lassName="container--viwsettings" style={{ background: 'white', top:120, height: 600, width: '100%',}}>
             <DataGrid rows={dataCovidInfo} columns={columns} pageSize={10} checkboxSelection />
         </div>
         </Container>
