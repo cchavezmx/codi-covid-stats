@@ -95,7 +95,7 @@ function CovidForm() {
        setIdUser(idUniqueUser())
     },[])
 
-    
+
 // OBEJTO PARA FIREBASE
 
     const respObjectSend = {
@@ -177,7 +177,7 @@ function CovidForm() {
                 <span className='booleanas'>
                     {/* PREGUNTAS BOOLEANAS */}
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">¿Ha presentado tos Seaca?</FormLabel>
+                      <FormLabel component="legend">¿Ha presentado tos Seca?</FormLabel>
                       <RadioGroup aria-label="tos" name="tos" value={tos} onChange={handleTosChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
