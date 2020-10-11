@@ -21,6 +21,18 @@
     background: url(https://www.brainpickings.org/wp-content/themes/brainpickings/images/bckgd_body.png);  
   }
 
+  .booleanas{
+    display: flex;
+    justify-content: left;
+    color: black;
+    align-items: center;
+    margin: 0.3rem 0.3rem 0.3rem 0.3rem ;
+    border: 2px solid rgb(72, 72, 170);
+    border-radius: 0.3rem;
+    padding: 1rem 1rem 1rem 1rem;
+    background: url(https://www.brainpickings.org/wp-content/themes/brainpickings/images/bckgd_body.png);  
+  }
+
   .button {
     margin: 1rem;
     width: 20rem;

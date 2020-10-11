@@ -5,7 +5,7 @@ import './Style.css'
 // ESTILOS MATERIAL UI
 import { FormControl, FormHelperText, FormLabel, RadioGroup, Radio, FormControlLabel, Button, TextField } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Autocomplete } from '@material-ui/lab';
 
 
 // Router Dom
@@ -16,21 +16,21 @@ import { Redirect } from 'react-router-dom';
 
 // import config firebase
 import { db } from '../../config/'
-
 import  personaName  from '../../assets/personaName.js'
 
 
-
 function CovidForm() {
-
-        
+       
     //ESTE VALOR VIENE DE LAS PROPS DE LA VENTANA DE USUARIOS
     // lA LISTA ASESINA
+    // TODO: Agreagar error en el campo de nombre
     const [ nameUser, setNameUser ] = useState('Nombre')
-    const handleNameChange = (e, newValue) => {
-        console.log(e, newValue)
-        setNameUser(newValue)
-        
+    const handleNameChange = (_, newValue) => {
+        if(newValue === null ){
+            alert('Favor de Seleccionar un nombre de la lista')
+        }else{
+            return setNameUser(newValue)
+        }        
     }
 
     // PARA LA TOS
@@ -68,30 +68,21 @@ function CovidForm() {
         if(e.target.value === 'true' ) return setResp(true)
     }
 
-    // para nombre de la persona
-    // const [ name, setName ] = useState('')
-    // const handleNameChage = (e) =>{
-    //     setName(e.target.value)
-    // }
-
-
     // para la temperatura 
     const [ temp, setTemp ] = useState('')
     const handleTempChange = (e) => {
         const tempNumer = Number(e.target.value)
         console.log(tempNumer)
-            if(tempNumer < 0){
+            if(tempNumer < 0 || tempNumer > 38){
                 alert('temperatura no valida')
             }else{
                 return setTemp(tempNumer)
             }
     }
 
-
 // OBEJTO PARA FIREBASE
 
     const respObjectSend = {
-        
             nombre : nameUser.name,
             temperatura: temp,
             tos: tos,
@@ -99,24 +90,27 @@ function CovidForm() {
             fiebre: fiber,
             pariente: pariente,
             respiracion: resp,
-            fecha: Date.now()
-        
+            fecha: Date.now()        
     }
-// control de boton
-
+    
+// control deL boton Principal
     const [sendData, setSendDataOk] = useState(false)
 
-        const getInfoDatabase = async () => {
-            const docSend = db.collection('user').doc()
+    // SERVICIO PARA ENVIO DE DATOS
 
-            try {
-            await docSend.set(respObjectSend)
-            setSendDataOk(true)
-            } catch (error) {
-            console.log('nel pastel')
-            }
-        }
+    const getInfoDatabase = async () => {
+        const docSend = db.collection('user').doc()
+
+        try {
+        await docSend.set(respObjectSend)
+        setSendDataOk(true)
+        } catch (error) {
+        alert('No ha ingresado su nombre')
+        // console.log(error)
+        }}
     
+    // CONTROL DE ENVIO DE INFORMACION 
+
         const handleForm = async (e) => {
         e.preventDefault()
 
@@ -124,8 +118,7 @@ function CovidForm() {
               getInfoDatabase()
         } else {
             setErrorTempField(true)
-        }    
-    }
+        }}
 
     // control de error de temperatura 
     const [errorTempField, setErrorTempField] = useState(false)
@@ -162,52 +155,53 @@ function CovidForm() {
                       <FormHelperText id="temp-helper-text">Anota tu temperatura</FormHelperText> 
                     </FormControl>  
                 </div>
-                <div>
+                <span className='booleanas'>
+                    {/* PREGUNTAS BOOLEANAS */}
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Tos Seca</FormLabel>
+                      <FormLabel component="legend">¿Ha presentado tos Seaca?</FormLabel>
                       <RadioGroup aria-label="tos" name="tos" value={tos} onChange={handleTosChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
                       </RadioGroup>
                     </FormControl>
-                </div>
-                <div>
+                </span>
+                <span className='booleanas'>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Dolor</FormLabel>
+                      <FormLabel component="legend">¿Dolor de garganta o extremidades?</FormLabel>
                       <RadioGroup aria-label="dolor" name="dolor" value={dolor} onChange={handleDolorChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
                       </RadioGroup>
                     </FormControl>
-                </div>
-                <div>
+                </span>
+                <span className='booleanas'>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">fiebre</FormLabel>
+                      <FormLabel component="legend">¿Ha presentado fiebre?</FormLabel>
                       <RadioGroup aria-label="fiber" name="fiber" value={fiber} onChange={handleFiberChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
                       </RadioGroup>
                     </FormControl>
-                </div>
-                <div>
+                </span>
+                <span className='booleanas'>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Pariente</FormLabel>
+                      <FormLabel component="legend">¿Ha estado en contacto con un paciente diagnosticado con COVID-19?</FormLabel>
                       <RadioGroup aria-label="pariente" name="pariente" value={pariente} onChange={handleParienteChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
                       </RadioGroup>
                     </FormControl>
                     {/* respiracion */}
-                </div>
-                <div>
+                </span>
+                <span className='booleanas'>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend">Respiracion</FormLabel>
+                      <FormLabel component="legend">¿Dificultad para respirar?</FormLabel>
                       <RadioGroup aria-label="resp" name="resp" value={resp} onChange={handleRespChange}>
                           <FormControlLabel control={<Radio color="primary" />} value={false} label="No"></FormControlLabel>
                           <FormControlLabel control={<Radio color="primary" />} value={true} label="Si"></FormControlLabel>
                       </RadioGroup>
                     </FormControl>
-                </div>
+                </span>
                 <span className="container--boton">
                   <Button
                     // component={ Redirect }
