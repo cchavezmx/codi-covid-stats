@@ -1,0 +1,8 @@
+.container--appbar{
+    width: 100%;
+}
+
+.toolbar--appbar{
+    padding-top: 0.3rem;
+    padding-bottom: 1rem;
+}

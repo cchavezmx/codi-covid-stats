@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // import Radio from '@material-ui/core/Radio';
 import './Style.css'
 
@@ -6,7 +6,6 @@ import './Style.css'
 import { FormControl, FormHelperText, FormLabel, RadioGroup, Radio, FormControlLabel, Button, TextField } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import { Autocomplete } from '@material-ui/lab';
-
 
 // Router Dom
 // TODO: CREAR UN ESPACIO DONDE ESTEN LOS USUARIOS Y SE VEA QUIEN YA CONTESTO
@@ -17,6 +16,10 @@ import { Redirect } from 'react-router-dom';
 // import config firebase
 import { db } from '../../config/'
 import  personaName  from '../../assets/personaName.js'
+
+// import momentDate
+import { momentDate } from '../../middlewares/momentDate'
+import uniqueRandom from 'unique-random'
 
 
 function CovidForm() {
@@ -80,9 +83,24 @@ function CovidForm() {
             }
     }
 
+    // PARA GENERACION DE ID RANDOM 
+
+    const [ idUser, setIdUser ] = useState('')
+    const idUniqueUser = () =>{
+        const id = uniqueRandom(1,100000)
+        return id
+    } 
+
+    useEffect(() => {
+       setIdUser(idUniqueUser())
+    },[])
+
+    
 // OBEJTO PARA FIREBASE
 
     const respObjectSend = {
+
+            id: idUser,
             nombre : nameUser.name,
             temperatura: temp,
             tos: tos,
@@ -90,7 +108,7 @@ function CovidForm() {
             fiebre: fiber,
             pariente: pariente,
             respiracion: resp,
-            fecha: Date.now()        
+            fecha: momentDate        
     }
     
 // control deL boton Principal
@@ -100,10 +118,10 @@ function CovidForm() {
 
     const getInfoDatabase = async () => {
         const docSend = db.collection('user').doc()
-
         try {
         await docSend.set(respObjectSend)
         setSendDataOk(true)
+
         } catch (error) {
         alert('No ha ingresado su nombre')
         // console.log(error)
@@ -134,6 +152,7 @@ function CovidForm() {
         <form>
             <div className="container">
                 <div className="center--div">
+                    {console.log(idUser)}
                     {/* NOMBRE DE LA PERSONA COMBO */}
                     <FormControl>
                         <Autocomplete
