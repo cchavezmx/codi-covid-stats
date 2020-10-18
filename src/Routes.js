@@ -6,6 +6,8 @@ import CovidFrom from './Views/CovidForm'
 import Home from './Views/Home'
 import SettingsView from './Views/SettingsView'
 
+import NewForm from './Views/CovidForm/NewForm'
+
 
 export default 
     <Fragment>
@@ -18,5 +20,8 @@ export default
         <Route
         exact path="/settings" component={SettingsView}
         /> 
+        <Route 
+        exact path="/nuevaform" component={NewForm}
+        />
     </Fragment>
 

@@ -19,6 +19,7 @@ const columns = [
 function SettingsView() {
 
     const [ dataCovidInfo, setDataCovidInfo ] = useState([])
+
     const laListaAsesina = []
         
     const dataCovidUser = async () => {
@@ -35,8 +36,8 @@ function SettingsView() {
     }
 
     useEffect(() => {
-        dataCovidUser()
-    }, [])
+        dataCovidUser() 
+    })
 
     return (
     <Fragment>
